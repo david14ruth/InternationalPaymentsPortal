@@ -1,0 +1,23 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: mcr.microsoft.com/dotnet/sdk:7.0
+
+    steps:
+      - checkout
+
+      - run:
+          name: Restore packages
+          command: dotnet restore
+
+      - run:
+          name: Build project
+          command: dotnet build --configuration Release --no-restore
+
+workflows:
+  version: 2
+  build-workflow:
+    jobs:
+      - build
