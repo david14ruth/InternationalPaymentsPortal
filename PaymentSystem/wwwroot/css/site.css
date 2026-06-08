@@ -1,0 +1,47 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.inline-flex {
+    display: inline-flex !important;
+    width: 100% !important;
+}
+.blue {
+    color: #0d6efd;
+}
+.inline-flex-2 {
+    display: inline-block !important;
+
+}
+.text_rm-border{
+    border: dashed thin 0.1px !important;
+    outline: none !important;
+}
+li::marker {
+    color: #0d6efd;
+<<<<<<< HEAD
+}
+footer a:hover {
+    color: #0d6efd !important;
+    transition: 0.3s;
+=======
+>>>>>>> a298f210f7d589ca76a3a74262b11ebc40b0c253
+}

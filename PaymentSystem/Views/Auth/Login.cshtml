@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .login-wrapper {
+        width: 100%;
+        max-width: 900px;
+        display: flex;
+        backdrop-filter: blur(15px);
+        background: rgba(255,255,255,0.9);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    }
+
+    .left-panel {
+        flex: 1;
+        background: linear-gradient(135deg, #0d6efd, #003a99);
+        color: white;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .right-panel {
+        flex: 1;
+        padding: 50px;
+        background: white;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    .btn-primary {
+        border-radius: 30px;
+        padding: 12px;
+        font-weight: 600;
+    }
+
+    .password-wrapper {
+        position: relative;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+    .loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    @@media (max-width: 768px) {
+        .login-wrapper {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+
+    <div class="login-wrapper">
+
+        <!-- LEFT -->
+        <div class="left-panel">
+            <h2>GlobalTrust Bank</h2>
+            <h1>Welcome Back</h1>
+            <p>Secure login with OTP verification system.</p>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="right-panel">
+
+            <h3>Login</h3>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <form asp-controller="Auth" asp-action="Login" method="post" id="loginForm">
+
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input name="username" class="form-control" placeholder="Enter email" required />
+                </div>
+
+                <div class="mb-3 password-wrapper">
+                    <label>Password</label>
+                    <input id="password" name="password" type="password" class="form-control" required />
+                    <span class="toggle-password" onclick="togglePassword()">👁</span>
+                </div>
+
+                <button class="btn btn-primary w-100" id="loginBtn">
+                    Login
+                </button>
+
+            </form>
+
+            <p class="text-center mt-3">
+                Don't have an account?
+                <a asp-controller="Auth" asp-action="Register">Create Account</a>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function togglePassword() {
+        var pass = document.getElementById("password");
+        pass.type = pass.type === "password" ? "text" : "password";
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function () {
+        document.getElementById("loginBtn").innerText = "Logging in...";
+        document.getElementById("loginBtn").disabled = true;
+    });
+</script>

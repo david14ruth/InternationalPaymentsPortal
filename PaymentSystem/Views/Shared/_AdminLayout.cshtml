@@ -1,0 +1,151 @@
+﻿@{
+    var user = Context.Session.GetString("User");
+
+    // 🔐 SAFE ROLE HANDLING (FIX)
+    var role = Context.Session.GetString("Role")?.Trim();
+
+    bool isSuperAdmin =
+        !string.IsNullOrEmpty(role) &&
+        role.Equals("SuperAdmin", StringComparison.OrdinalIgnoreCase);
+
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <style>
+            body {
+                margin: 0;
+                font-family: 'Segoe UI', sans-serif;
+                background: #f5f7fb;
+            }
+
+            .sidebar {
+                width: 250px;
+                height: 100vh;
+                background: white;
+                position: fixed;
+                top: 0;
+                left: 0;
+                padding: 20px;
+                border-right: 1px solid #e5e7eb;
+            }
+
+                .sidebar a {
+                    display: block;
+                    padding: 10px;
+                    margin-bottom: 6px;
+                    text-decoration: none;
+                    color: #334155;
+                    border-radius: 8px;
+                }
+
+                    .sidebar a:hover {
+                        background: #e0ecff;
+                        color: #2563eb;
+                    }
+
+                    .sidebar a.active {
+                        background: #2563eb;
+                        color: white;
+                    }
+
+            .topbar {
+                margin-left: 250px;
+                background: white;
+                padding: 15px;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .content {
+                margin-left: 250px;
+                padding: 20px;
+            }
+
+            .card-box {
+                background: white;
+                padding: 20px;
+                border-radius: 12px;
+            }
+
+            .badge-role {
+                background: #2563eb;
+                color: white;
+                padding: 5px 10px;
+                border-radius: 20px;
+            }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <h5 class="text-primary"></h5>
+
+        <a asp-controller="Admin" asp-action="Index"
+               class="@(controller == "Admin" && action == "Index" ? "active" : "")">
+            🏠 OVERVIEW
+        </a>
+
+        <a asp-controller="Admin" asp-action="Users">
+            👥 Users
+        </a>
+
+        <a asp-controller="Admin" asp-action="CreateUser">
+            ➕ Create User
+        </a>
+
+        <!-- 🔐 ONLY SUPER ADMIN SEES THIS -->
+        @if (isSuperAdmin)
+        {
+            <a asp-controller="Admin" asp-action="CreateAdmin">
+                🔐 Create Admin
+            </a>
+        }
+
+        <a asp-controller="Admin" asp-action="UpdateRequests">
+            📩 Requests
+        </a>
+
+        <a asp-controller="Admin" asp-action="Settings">
+            ⚙️ Settings
+        </a>
+
+        <a asp-controller="Admin" asp-action="Reports">
+            📊 Reports
+        </a>
+
+        <a asp-controller="Admin" asp-action="LinkedAccounts">
+            🔗 Linked Accounts
+        </a>
+
+        <a asp-controller="Auth" asp-action="Logout">
+            🚪 Logout
+        </a>
+
+    </div>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        Welcome, <b>@user</b>
+        <span class="badge-role">@role</span>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+        <div class="card-box">
+            @RenderBody()
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,272 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f8f9fa, #eef3ff);
+        overflow-x: hidden;
+    }
+
+    /* ================= GLASS ================= */
+    .glass {
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        transition: all 0.6s ease;
+    }
+
+    /* ================= ANIMATION CLASSES ================= */
+    .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.8s ease;
+    }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    /* ================= HIGHLIGHT ================= */
+    .highlight {
+        color: #0d6efd;
+    }
+
+    /* ================= BUTTON ================= */
+    .btn {
+        transition: all 0.3s ease;
+    }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+    /* ================= IMAGE ================= */
+    img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        transition: transform 0.5s ease;
+    }
+
+        img:hover {
+            transform: scale(1.02);
+        }
+</style>
+
+<!-- ================= HERO ================= -->
+<div class="container mt-5 reveal">
+    <div class="row align-items-center g-4">
+
+        <div class="col-lg-6">
+            <div class="glass reveal">
+                <h1>Modern Banking Made Simple</h1>
+                <p>
+                    GlobalTrust is your secure digital banking platform for fast,
+                    safe and reliable money management.
+                </p>
+
+                <a href="#transfer" class="btn btn-primary rounded-pill px-4">
+                    Make a Transfer
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-6 reveal">
+            <img src="~/image/image_1.jpeg" alt="hero image" />
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= STATS ================= -->
+<div class="container mt-5 text-center reveal">
+
+    <div class="row g-4">
+
+        <div class="col-md-3 glass reveal">
+            <h3 class="highlight">50K+</h3>
+            <p>Active Users</p>
+        </div>
+
+        <div class="col-md-3 glass reveal">
+            <h3 class="highlight">120+</h3>
+            <p>Supported Countries</p>
+        </div>
+
+        <div class="col-md-3 glass reveal">
+            <h3 class="highlight">99.9%</h3>
+            <p>System Uptime</p>
+        </div>
+
+        <div class="col-md-3 glass reveal">
+            <h3 class="highlight">24/7</h3>
+            <p>Support</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SERVICES ================= -->
+<div class="container mt-5 text-center reveal">
+
+    <h2 class="mb-4">Our Banking Services</h2>
+
+    <div class="row g-4">
+
+        <div class="col-md-4 reveal">
+            <div class="glass">
+                <h5>💸 Money Transfers</h5>
+                <p>Send money instantly across countries.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 reveal">
+            <div class="glass">
+                <h5>🏦 Digital Accounts</h5>
+                <p>Open and manage accounts online.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4 reveal">
+            <div class="glass">
+                <h5>🔒 Secure Payments</h5>
+                <p>Encrypted and fraud-protected transactions.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SECURITY ================= -->
+<div class="container mt-5 reveal">
+
+    <div class="row align-items-center g-4">
+
+        <div class="col-lg-6 reveal">
+            <div class="glass">
+                <h2 class="highlight">Bank-Level Security</h2>
+                <p>
+                    Your money is protected using advanced encryption and fraud detection systems.
+                </p>
+
+                <ul>
+                    <li>End-to-end encryption</li>
+                    <li>AI fraud monitoring</li>
+                    <li>Secure login verification</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-6 reveal">
+            <img src="~/image/image_3.jpeg" alt="security image" />
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= BANK TRANSFER ================= -->
+<div id="transfer" class="container mt-5 reveal">
+
+    <div class="glass">
+
+        <h2 class="text-center highlight">Make a Bank Transfer</h2>
+
+        <p class="text-center text-muted">
+            Transfer money securely to local and international accounts in seconds.
+        </p>
+
+        <form>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Sender Full Name" />
+                </div>
+
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Recipient Full Name" />
+                </div>
+
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Recipient Bank Account" />
+                </div>
+
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Bank Name (e.g. FNB, Capitec)" />
+                </div>
+
+                <div class="col-md-6">
+                    <input class="form-control" placeholder="Amount (ZAR)" />
+                </div>
+
+                <div class="col-md-6">
+                    <select class="form-control">
+                        <option>Local Transfer (South Africa)</option>
+                        <option>International Transfer</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="alert alert-info mt-4">
+                🔒 Transfers are protected with multi-layer security and verification.
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary rounded-pill px-5">
+                    Send Money
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<!-- ================= APP DOWNLOAD ================= -->
+<div class="container mt-5 text-center reveal">
+
+    <div class="glass p-4">
+
+        <h2 class="highlight">Download the GlobalTrust App</h2>
+        <p>Bank anywhere, anytime from your smartphone.</p>
+
+        <div class="d-flex justify-content-center gap-3 mt-3">
+
+            <button class="btn btn-dark rounded-pill px-4 d-flex align-items-center gap-2">
+                <i class="bi bi-apple"></i>
+                App Store
+            </button>
+
+            <button class="btn btn-success rounded-pill px-4 d-flex align-items-center gap-2">
+                <i class="bi bi-google-play"></i>
+                Google Play
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= ANIMATION SCRIPT ================= -->
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("active");
+            }
+        });
+    }, {
+        threshold: 0.15
+    });
+
+    document.querySelectorAll(".reveal").forEach(el => {
+        observer.observe(el);
+    });
+</script>

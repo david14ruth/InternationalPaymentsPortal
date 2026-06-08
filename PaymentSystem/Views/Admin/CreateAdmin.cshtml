@@ -1,0 +1,183 @@
+﻿@model PaymentSystem.Models.User
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Create Admin";
+}
+
+<style>
+    body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #eef3ff, #f6f9ff);
+        height: 100vh;
+    }
+
+    .wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 25px;
+        position: relative;
+    }
+
+    /* BACK BUTTON */
+    .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+    .back-btn a {
+        text-decoration: none;
+        background: #fff;
+        padding: 10px 16px;
+        border-radius: 30px;
+        font-weight: 600;
+        color: #0d6efd;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        transition: 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .back-btn a:hover {
+        background: #0d6efd;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* CARD */
+    .card {
+        width: 100%;
+        max-width: 480px;
+        background: white;
+        border-radius: 18px;
+        padding: 40px;
+        box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+        animation: fadeIn 0.5s ease;
+        text-align: center;
+    }
+
+    /* LOGO */
+    .logo img {
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #0d6efd;
+        margin-bottom: 10px;
+    }
+
+    /* TITLE */
+    .title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #0d6efd;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 25px;
+    }
+
+    /* INPUTS */
+    label {
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 6px;
+        display: block;
+        text-align: left;
+        color: #333;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #dee2e6;
+        transition: 0.2s ease;
+        font-size: 14px;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #0d6efd;
+        box-shadow: 0 0 8px rgba(13,110,253,0.2);
+    }
+
+    /* BUTTON */
+    .btn-primary {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 30px;
+        background: #0d6efd;
+        color: white;
+        font-weight: 600;
+        margin-top: 10px;
+        cursor: pointer;
+        transition: 0.25s ease;
+    }
+
+    .btn-primary:hover {
+        background: #084298;
+        transform: translateY(-2px);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="wrapper">
+
+    <!-- BACK BUTTON -->
+    <div class="back-btn">
+        <a asp-controller="Admin" asp-action="Index">
+            ← Dashboard
+        </a>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+
+        <!-- LOGO -->
+        <div class="logo">
+            <img src="~/image/image_Logo.jpeg" alt="Logo" />
+        </div>
+
+        <div class="title">Create Admin</div>
+        <div class="subtitle">Add a secure administrator account</div>
+
+        <form asp-action="CreateAdmin" method="post">
+
+            <div class="mb-3">
+                <label>Name</label>
+                <input asp-for="Name" class="form-control" placeholder="Enter full name" />
+            </div>
+
+            <div class="mb-3">
+                <label>Email</label>
+                <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+            </div>
+
+            <div class="mb-3">
+                <label>Password</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter secure password" />
+            </div>
+
+            <button class="btn-primary">
+                Create Admin
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

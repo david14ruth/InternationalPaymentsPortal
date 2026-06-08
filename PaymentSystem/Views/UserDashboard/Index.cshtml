@@ -1,0 +1,255 @@
+﻿@model PaymentSystem.Models.UserDashboardViewModel
+
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewData["Title"] = "Dashboard";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    body {
+    background: #f4f6fb;
+    }
+
+    .top-card {
+    background: linear-gradient(135deg, #0d6efd, #003a99);
+    color: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .card-box {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+    }
+
+    .btn-quick {
+    border-radius: 12px;
+    font-weight: 600;
+    width: 100%;
+    }
+
+    .section-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    }
+
+    .transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    }
+
+    canvas {
+    width: 100% !important;
+    }
+
+    .logo-mini {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- ================= ALERTS (NEW FIX) ================= -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success text-center">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger text-center">
+            @TempData["Error"]
+        </div>
+    }
+
+    <!-- ================= TOP SECTION ================= -->
+    <div class="row g-4">
+
+        <!-- USER CARD -->
+        <div class="col-md-6">
+            <div class="top-card">
+
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <img src="~/image/image_Logo.jpeg" class="logo-mini" />
+                    <strong>GlobalTrust Digital Bank</strong>
+                </div>
+
+                <h4>Welcome, @Model.User.Name 👋</h4>
+                <small>Role: @Model.User.Role</small>
+
+                <hr style="border-color: rgba(255,255,255,0.3)" />
+
+                <h5>Account Number</h5>
+                <h3>**** **** **** 4821</h3>
+
+            </div>
+        </div>
+
+        <!-- BALANCE -->
+        <div class="col-md-6">
+            <div class="card-box">
+
+                <h6 class="text-muted">Available Balance</h6>
+                <h2 class="text-primary">R 12,500.75</h2>
+                <p class="text-success">✔ Active Account</p>
+
+                <div class="row g-2 mt-3">
+
+                    <div class="col-4">
+                        <button class="btn btn-primary btn-quick">💸 Send</button>
+                    </div>
+
+                    <div class="col-4">
+                        <button class="btn btn-success btn-quick">📥 Request</button>
+                    </div>
+
+                    <div class="col-4">
+                        <button class="btn btn-dark btn-quick">💳 Pay</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= PAYMENT FORM ================= -->
+    <div class="card-box mt-4">
+
+        <h5 class="section-title">💸 Make International Payment</h5>
+
+        <form asp-controller="Payments" asp-action="Create" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div class="row g-2">
+
+                <div class="col-md-6">
+                    <input name="RecipientName" class="form-control" placeholder="Recipient Name" required />
+                </div>
+
+                <div class="col-md-6">
+                    <input name="AccountNumber" class="form-control" placeholder="Account Number" required />
+                </div>
+
+                <div class="col-md-6">
+                    <input name="BankName" class="form-control" placeholder="Bank Name" required />
+                </div>
+
+                <div class="col-md-6">
+                    <input name="SwiftCode" class="form-control" placeholder="SWIFT Code" required />
+                </div>
+
+                <div class="col-md-6">
+                    <input name="Amount" type="number" class="form-control" placeholder="Amount (ZAR)" required />
+                </div>
+
+                <div class="col-md-6">
+                    <select name="Currency" class="form-control" required>
+                        <option value="">Select Currency</option>
+                        <option>ZAR</option>
+                        <option>USD</option>
+                        <option>EUR</option>
+                        <option>GBP</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button class="btn btn-primary w-100 mt-3">
+                🚀 Pay Now
+            </button>
+
+        </form>
+    </div>
+
+    <!-- ================= DOWNLOAD BUTTON ================= -->
+    <div class="card-box mt-4">
+        <a asp-controller="UserDashboard"
+               asp-action="DownloadStatement"
+               class="btn btn-dark w-100">
+            📄 Download Transaction Statement
+        </a>
+    </div>
+
+    <!-- ================= TRANSACTIONS ================= -->
+    <div class="card-box mt-4">
+
+        <h5 class="section-title">📊 Your Transactions</h5>
+
+        @if (Model.Payments != null && Model.Payments.Any())
+        {
+            foreach (var p in Model.Payments)
+            {
+                <div class="transaction-item">
+
+                    <div>
+                        <strong>@p.RecipientName</strong><br />
+                        <small class="text-muted">
+                            @p.BankName - @p.AccountNumber
+                        </small>
+                    </div>
+
+                    <div class="text-end">
+                        <strong>R @p.Amount</strong><br />
+                        <small class="text-muted">
+                            @p.DateCreated.ToString("dd MMM yyyy")
+                        </small>
+                    </div>
+
+                    <div>
+                        <span class="badge bg-warning text-dark">
+                            @p.Status
+                        </span>
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">No transactions found yet.</p>
+        }
+
+    </div>
+
+    <!-- ================= CHART ================= -->
+    <div class="card-box mt-4">
+
+        <h5 class="section-title">📈 Monthly Transfers</h5>
+
+        <canvas id="transferChart"></canvas>
+
+    </div>
+
+</div>
+
+<script>
+    new Chart(document.getElementById('transferChart'), {
+    type: 'line',
+    data: {
+    labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+    datasets: [{
+    label: 'Transfers (ZAR)',
+    data: [1200,1900,3000,2500,4000,3200],
+    borderColor: '#0d6efd',
+    backgroundColor: 'rgba(13,110,253,0.1)',
+    fill: true,
+    tension: 0.4
+    }]
+    }
+    });
+</script>

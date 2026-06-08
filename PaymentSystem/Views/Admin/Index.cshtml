@@ -1,0 +1,314 @@
+﻿@model PaymentSystem.Models.DashboardViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Admin Dashboard";
+
+    var role = Context.Session.GetString("Role");
+    var user = Context.Session.GetString("User");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+        --bg: #f5f8ff;
+        --card: #ffffff;
+        --text: #000;
+        --primary: #0d6efd;
+        --border: #e5e5e5;
+        }
+
+        body.dark {
+        --bg: #0b0f1a;
+        --card: #121826;
+        --text: #fff;
+        --border: #1f2a44;
+        }
+
+        body {
+        margin: 0;
+        font-family: 'Segoe UI';
+        background: var(--bg);
+        color: var(--text);
+        }
+
+        .sidebar {
+        width: 240px;
+        height: 100vh;
+        position: fixed;
+        background: var(--card);
+        border-right: 1px solid var(--border);
+        padding: 15px;
+        }
+
+        .logo {
+        text-align: center;
+        margin-bottom: 20px;
+        }
+
+        .logo img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        }
+
+        .menu a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: var(--text);
+        border-radius: 8px;
+        margin-bottom: 5px;
+        }
+
+        .menu a:hover {
+        background: var(--primary);
+        color: #fff;
+        }
+
+        .main {
+        margin-left: 240px;
+        padding: 20px;
+        }
+
+        .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--card);
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        }
+
+        #search {
+        width: 280px;
+        border-radius: 20px;
+        }
+
+        .card-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        padding: 18px;
+        border-radius: 12px;
+        transition: 0.2s;
+        }
+
+        .card-box:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .chart-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        padding: 15px;
+        border-radius: 12px;
+        margin-top: 15px;
+        }
+
+        canvas {
+        max-height: 180px !important;
+        }
+
+        .notif {
+        position: relative;
+        cursor: pointer;
+        }
+
+        .dot {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 8px;
+        height: 8px;
+        background: red;
+        border-radius: 50%;
+        }
+
+        .highlight {
+        background: rgba(13,110,253,0.08) !important;
+        }
+
+        a.card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="logo">
+            <img src="~/image/image_Logo.jpeg" />
+            <h6>GlobalTrust</h6>
+        </div>
+
+        <div class="menu">
+            <a href="#">🏠 OVERVIEW</a>
+            <a asp-action="Users">👥 Users</a>
+            <a asp-action="CreateUser">➕ Create User</a>
+            <a asp-action="CreateAdmin">🔐 Create Admin</a>
+            <a asp-action="UpdateRequests">📩 Requests</a>
+
+            <hr />
+
+            <a asp-controller="Auth" asp-action="Logout">🚪 Logout</a>
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+
+            <input id="search" class="form-control" placeholder="Search users..." />
+
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div class="notif">
+                    🔔
+                    <div class="dot"></div>
+                </div>
+
+                <button onclick="toggleDark()" class="btn btn-outline-primary btn-sm">🌙</button>
+
+                <span class="badge bg-primary">@role</span>
+            </div>
+
+        </div>
+
+        <!-- STATS -->
+        <div class="row mt-3">
+
+            <div class="col-md-4">
+                <div class="card-box">
+                    👥 Users <h3>@Model.TotalUsers</h3>
+                </div>
+            </div>
+
+            <!-- ✅ CLICKABLE PAYMENTS -->
+            <div class="col-md-4">
+                <a asp-controller="AdminPayments" asp-action="Index" class="card-link">
+                    <div class="card-box">
+                        💳 Payments <h3>@Model.TotalPayments</h3>
+                        <small>View all transactions</small>
+                    </div>
+                </a>
+            </div>
+
+            <!-- ✅ CLICKABLE REVENUE -->
+            <div class="col-md-4">
+                <a asp-controller="AdminPayments" asp-action="Index" class="card-link">
+                    <div class="card-box">
+                        📊 Revenue <h3>@Model.TotalRevenue</h3>
+                        <small>View revenue breakdown</small>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- CHART -->
+        <div class="chart-box">
+            <h6>User Growth</h6>
+            <canvas id="chart"></canvas>
+        </div>
+
+        <!-- USERS TABLE -->
+        <div class="card-box mt-3">
+
+            <h6>Users</h6>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+
+                <tbody id="userTable">
+                    @foreach (var u in Model.Users)
+                    {
+                        <tr>
+                            <td>@u.Id</td>
+                            <td>@u.Name</td>
+                            <td>@u.Email</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function toggleDark() {
+        document.body.classList.toggle("dark");
+        localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+        }
+
+        window.onload = function () {
+        if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+        }
+        };
+
+        document.getElementById("search").addEventListener("input", function () {
+
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#userTable tr");
+
+        rows.forEach(row => {
+
+        let text = row.innerText.toLowerCase();
+
+        if (text.includes(value)) {
+        row.style.display = "";
+        row.classList.add("highlight");
+        } else {
+        row.style.display = "none";
+        row.classList.remove("highlight");
+        }
+
+        });
+
+        });
+
+        const total = @Model.TotalUsers;
+        const data = [1,2,3,4,5,6].map(x => Math.max(1, Math.floor(total/6)*x));
+
+        new Chart(document.getElementById("chart"), {
+        type: "line",
+        data: {
+        labels: ["Jan","Feb","Mar","Apr","May","Jun"],
+        datasets: [{
+        label: "Users Growth",
+        data: data,
+        borderColor: "#0d6efd",
+        fill: true
+        }]
+        }
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+﻿@model PaymentSystem.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .register-wrapper {
+        width: 100%;
+        max-width: 1050px;
+        display: flex;
+        backdrop-filter: blur(15px);
+        background: rgba(255,255,255,0.95);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    }
+
+    .left-panel {
+        flex: 1;
+        background: linear-gradient(135deg, #0d6efd, #003a99);
+        color: white;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+        .brand img {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+        }
+
+    .left-panel h1 {
+        font-weight: 700;
+        font-size: 32px;
+        margin-bottom: 15px;
+    }
+
+    .left-panel p {
+        opacity: 0.9;
+        font-size: 15px;
+    }
+
+    .right-panel {
+        flex: 1;
+        padding: 50px;
+    }
+
+    h3 {
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13,110,253,0.2);
+        }
+
+    .btn-primary {
+        border-radius: 30px;
+        padding: 12px;
+        font-weight: 600;
+    }
+
+    .alert {
+        border-radius: 10px;
+    }
+
+    .info-box {
+        background: #e9f2ff;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 13px;
+        margin-bottom: 15px;
+        color: #0d6efd;
+    }
+
+    @@media (max-width: 768px) {
+        .register-wrapper {
+            flex-direction: column;
+        }
+
+        .left-panel {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .right-panel {
+            padding: 30px;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+
+    <div class="register-wrapper">
+
+        <!-- LEFT -->
+        <div class="left-panel">
+
+            <div class="brand">
+                <img src="~/image/image_Logo.jpeg" />
+                GlobalTrust Bank
+            </div>
+
+            <h1>Secure Banking Registration</h1>
+
+            <p>
+                Create your international banking profile with OTP verification security.
+            </p>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="right-panel">
+
+            <h3>Create Account</h3>
+
+            <div class="info-box">
+                🔐 Your OTP will be sent after submitting this form.
+                You must verify it before login is allowed.
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form asp-controller="Auth" asp-action="Register" method="post">
+
+                <div class="mb-3">
+                    <label>Full Name</label>
+                    <input asp-for="FullName" class="form-control" placeholder="John Doe" />
+                </div>
+
+                <div class="mb-3">
+                    <label>ID Number</label>
+                    <input asp-for="IdNumber" class="form-control" placeholder="8001011234088" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Account Number</label>
+                    <input asp-for="AccountNumber" class="form-control" placeholder="1234567890" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="john@email.com" />
+                </div>
+
+                <div class="mb-3">
+                    <label>Password</label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" />
+                </div>
+
+                <div class="mb-2 text-muted" style="font-size:13px;">
+                    Password must include uppercase, lowercase, number & symbol.
+                </div>
+
+                <button class="btn btn-primary w-100 mt-2">
+                    Send OTP & Create Account
+                </button>
+
+            </form>
+
+            <p class="text-center mt-3">
+                Already have an account?
+                <a asp-controller="Auth" asp-action="Login">Login</a>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>

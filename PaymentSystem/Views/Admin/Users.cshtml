@@ -1,0 +1,87 @@
+﻿@model List<PaymentSystem.Models.User>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Users Management";
+}
+
+<h2>👥 Users Management</h2>
+
+<div class="table-container">
+
+    <table class="table table-striped">
+
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @if (Model != null && Model.Any())
+            {
+                foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+
+                        <td>
+                            @if (user.Role == "SuperAdmin")
+                            {
+                                <span class="badge bg-dark">Main Admin</span>
+                            }
+                            else if (user.Role == "Admin")
+                            {
+                                <span class="badge bg-danger">Admin</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-primary">User</span>
+                            }
+                        </td>
+
+                        <td>
+                            @if (user.Role != "SuperAdmin")
+                            {
+                                <a class="btn btn-warning btn-sm"
+                                       asp-action="RequestUpdate"
+                                       asp-route-id="@user.Id">
+                                    ✏ Edit
+                                </a>
+
+                                <a class="btn btn-danger btn-sm"
+                                       asp-action="DeleteUser"
+                                       asp-route-id="@user.Id"
+                                       onclick="return confirm('Delete this user?')">
+                                    🗑 Delete
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Protected</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        No users found
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

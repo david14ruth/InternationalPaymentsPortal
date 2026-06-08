@@ -1,0 +1,141 @@
+﻿@model PaymentSystem.Models.User
+
+@{
+    ViewData["Title"] = "Create Admin";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #eef3ff, #f8fbff);
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-wrapper {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+    }
+
+    .admin-card {
+        width: 100%;
+        max-width: 520px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        padding: 35px;
+        animation: fadeIn 0.4s ease-in-out;
+        position: relative;
+    }
+
+    .title {
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #0d6efd;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-size: 14px;
+        color: gray;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 11px;
+        transition: 0.2s;
+    }
+
+    .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 8px rgba(13,110,253,0.25);
+    }
+
+    .btn-primary {
+        background: #0d6efd;
+        border: none;
+        border-radius: 30px;
+        padding: 12px;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .btn-primary:hover {
+        background: #084298;
+        transform: scale(1.02);
+    }
+
+    /* BACK BUTTON */
+    .back-btn {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+    }
+
+    .back-btn a {
+        border-radius: 30px;
+        padding: 6px 14px;
+        font-size: 13px;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @@media (max-width: 576px) {
+        .admin-card {
+            padding: 25px;
+        }
+    }
+</style>
+
+<div class="page-wrapper">
+
+    <div class="admin-card">
+
+        <!-- BACK BUTTON -->
+        <div class="back-btn">
+            <a asp-controller="Admin" asp-action="Index" class="btn btn-light shadow-sm">
+                ← Back
+            </a>
+        </div>
+
+        <h3 class="title">👤 Create Admin</h3>
+        <p class="subtitle">Add a new administrator to GlobalTrust system</p>
+
+        <form asp-action="CreateAdmin" method="post">
+
+            <div class="mb-3">
+                <label>Name</label>
+                <input asp-for="Name" class="form-control" placeholder="Full name" />
+            </div>
+
+            <div class="mb-3">
+                <label>Email</label>
+                <input asp-for="Email" class="form-control" placeholder="Email address" />
+            </div>
+
+            <div class="mb-3">
+                <label>Password</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Secure password" />
+            </div>
+
+            <button class="btn btn-primary w-100 mt-2">
+                Create Admin
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,23 @@
+﻿@model PaymentSystem.Models.User
+
+<h2>Edit Profile (Request Update)</h2>
+
+<form method="post" asp-action="EditProfile">
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <button class="btn btn-warning">
+        Send Update Request
+    </button>
+
+</form>

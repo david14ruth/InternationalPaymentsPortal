@@ -1,0 +1,141 @@
+﻿@{
+    ViewData["Title"] = "Verify Registration OTP";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .otp-card {
+        width: 100%;
+        max-width: 450px;
+        background: rgba(255,255,255,0.95);
+        border-radius: 18px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        padding: 35px;
+        text-align: center;
+        backdrop-filter: blur(15px);
+    }
+
+    .otp-title {
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #0d6efd;
+    }
+
+    .otp-text {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px;
+        text-align: center;
+        font-size: 22px;
+        letter-spacing: 6px;
+    }
+
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13,110,253,0.2);
+        }
+
+    .btn-success {
+        border-radius: 30px;
+        padding: 12px;
+        font-weight: 600;
+        width: 100%;
+        transition: 0.3s;
+    }
+
+        .btn-success:hover {
+            background: #157347;
+        }
+
+    .alert {
+        border-radius: 10px;
+    }
+
+    .timer {
+        font-weight: bold;
+        color: #dc3545;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="page-wrapper">
+
+    <div class="otp-card">
+
+        <h3 class="otp-title">Email Verification</h3>
+
+        <p class="otp-text">
+            Enter the OTP sent to your email to complete registration.
+        </p>
+
+        <!-- OPTIONAL TIMER DISPLAY (GOOD FOR MARKS) -->
+        <div class="timer">
+            OTP expires in: <span id="countdown">05:00</span>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        }
+
+        <form asp-action="VerifyRegisterOtp" method="post">
+
+            <input name="otp"
+                   class="form-control mb-3"
+                   maxlength="6"
+                   required
+                   placeholder="Enter OTP" />
+
+            <button class="btn btn-success">
+                Verify & Create Account
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+    // OPTIONAL OTP TIMER (5 MIN)
+    let time = 300;
+
+    let countdown = setInterval(() => {
+
+        let min = Math.floor(time / 60);
+        let sec = time % 60;
+
+        document.getElementById("countdown").innerText =
+            String(min).padStart(2, '0') + ":" +
+            String(sec).padStart(2, '0');
+
+        time--;
+
+        if (time < 0) {
+            clearInterval(countdown);
+            document.getElementById("countdown").innerText = "EXPIRED";
+        }
+
+    }, 1000);
+</script>

@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "OTP Verification";
+}
+
+<style>
+    body {
+        background: #f4f6f9;
+    }
+
+    .otp-card {
+        max-width: 420px;
+        margin: auto;
+        margin-top: 80px;
+        border: none;
+        border-radius: 15px;
+        padding: 30px;
+        background: white;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .otp-title {
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .timer-box {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    #timer {
+        font-weight: bold;
+        font-size: 18px;
+        color: #dc3545;
+    }
+
+    .otp-input {
+        font-size: 22px;
+        letter-spacing: 10px;
+        text-align: center;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .expired {
+        color: black !important;
+    }
+
+    .btn-primary {
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .btn-link {
+        font-size: 13px;
+        text-decoration: none;
+    }
+</style>
+
+<div class="otp-card">
+
+    <h3 class="otp-title">OTP Verification</h3>
+
+    <!-- TIMER -->
+    <div class="timer-box">
+        OTP expires in: <span id="timer">01:00</span>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger text-center">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success text-center">
+            @ViewBag.Message
+        </div>
+    }
+
+    <form asp-action="VerifyOtp" method="post">
+        @Html.AntiForgeryToken()
+
+        <input name="otp"
+               class="form-control otp-input"
+               maxlength="6"
+               required
+               placeholder="Enter OTP" />
+
+        <button id="verifyBtn"
+                class="btn btn-primary w-100 mt-3">
+            Verify OTP
+        </button>
+    </form>
+
+    <form asp-action="ResendOtp" method="post">
+        @Html.AntiForgeryToken()
+        <button class="btn btn-link w-100 mt-2">
+            Resend OTP
+        </button>
+    </form>
+
+</div>
+
+<script>
+    // ================= 1 MINUTE TIMER =================
+    let time = 60;
+
+    const timerEl = document.getElementById("timer");
+    const btn = document.getElementById("verifyBtn");
+
+    const interval = setInterval(() => {
+
+        let minutes = Math.floor(time / 60);
+        let seconds = time % 60;
+
+        timerEl.innerText =
+            String(minutes).padStart(2, '0') + ":" +
+            String(seconds).padStart(2, '0');
+
+        if (time <= 10) {
+            timerEl.style.color = "red";
+        }
+
+        time--;
+
+        if (time < 0) {
+            clearInterval(interval);
+
+            timerEl.innerText = "EXPIRED";
+            timerEl.classList.add("expired");
+
+            btn.disabled = true;
+            btn.innerText = "OTP Expired";
+        }
+
+    }, 1000);
+</script>

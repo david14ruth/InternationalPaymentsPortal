@@ -1,0 +1,72 @@
+﻿@model List<PaymentSystem.Models.User>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Pending Update Requests";
+}
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .table-box {
+        background: white;
+        padding: 20px;
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    .btn-approve {
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-size: 13px;
+    }
+</style>
+
+<!-- HEADER -->
+<div class="page-header">
+    <h2>📩 Pending Update Requests</h2>
+</div>
+
+<!-- TABLE -->
+<div class="table-box">
+
+    <table class="table table-bordered align-middle">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th style="width:150px;">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td>@user.Status</td>
+
+                    <td>
+                        <a asp-action="ApproveUpdate"
+                               asp-route-id="@user.Id"
+                               class="btn btn-success btn-sm btn-approve">
+                            Approve
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

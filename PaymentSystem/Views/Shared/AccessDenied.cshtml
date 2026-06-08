@@ -1,0 +1,95 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    Layout = null; // 🔥 VERY IMPORTANT (fix crash)
+
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+
+    string redirectUrl = "/Home/Index";
+
+    if (role == "Admin" || role == "SuperAdmin")
+    {
+        redirectUrl = "/Admin/Index";
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Access Denied</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <style>
+            body {
+                margin: 0;
+                font-family: 'Segoe UI';
+                background: linear-gradient(135deg, #0d6efd, #f5f7fb);
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .box {
+                background: white;
+                width: 420px;
+                padding: 40px;
+                border-radius: 20px;
+                text-align: center;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            }
+
+            .icon {
+                font-size: 60px;
+            }
+
+            .note {
+                margin-top: 15px;
+                background: #eef4ff;
+                padding: 10px;
+                border-radius: 8px;
+            }
+
+            .count {
+                margin-top: 15px;
+                color: #0d6efd;
+            }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <div class="icon">🚫</div>
+        <h2>Access Denied</h2>
+        <p>You are not allowed to access this page.</p>
+
+        <div class="note">
+            Please contact the <b>Head Admin Management</b> 😊
+        </div>
+
+        <div class="count">
+            Redirecting in <span id="t">4</span> seconds...
+        </div>
+    </div>
+
+    <script>
+            let t = 4;
+            let url = "@redirectUrl";
+
+            let timer = setInterval(() => {
+                t--;
+                document.getElementById("t").innerText = t;
+
+                if (t <= 0) {
+                    clearInterval(timer);
+                    window.location.href = url;
+                }
+            }, 1000);
+    </script>
+
+</body>
+</html>
